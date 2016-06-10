@@ -1,12 +1,70 @@
-0.0.7 TBD
+0.0.13 Thu 28, May, 2015
+  Update default host to google.com - www.ptb.de randomized timestamps
+0.0.12 Sun 26, Oct, 2014
+  Fix AppArmor for tlsdated: allow unprivileged helper to read the time.
+  Update tlsdated systemd service file.
+  Various little fixes and an early release to make the Debian Freeze!
+0.0.11 Mon 20, Oct, 2014
+  Fix routeup flushing when using stdout (Avery Pennarun).
+  Update AppArmor profile to support multiarch systems.
+  Instruct syslog to properly output tlsdated and pid information.
+    (This closes: https://github.com/ioerror/tlsdate/issues/144 )
+  Fix -Wsizeof-pointer-memaccess in build of tlsdated unit test.
+  FreeBSD build improvements (Fabian Keil).
+  Update man pages.
+  Update AppArmor profile to remove unused stanzas.
+  Fix seccomp filter support on x86 systems (Will Drewry).
+  Refactor chatty tlsdated logging output to make it quiet.
+  Close syslog after tlsdated finishes using it.
+  Update systemd and init.d scripts for Debian.
+0.0.10 Fri 26, Sep, 2014 
+  tlsdated removed from /usr/bin and now is only in /usr/sbin
+  This release is because 0.0.9 had two trivial bugs. Argh.
+0.0.9 Fri 25, Sep, 2014
+  Fix missing function prototype.
+  major libevent refactor by Will Drewry and Elly Fong-Jones of Google.
+  tlsdated should now function properly on ChromeOS and Debian GNU/Linux
+  Add ability to set COMPILE_DATE at configure/build time.
+  Add support for deterministic builds on Debian GNU/*.
+0.0.8 Sun 14, Sep, 2014
+  Add Debian GNU/Hurd and Debian GNU/kFreeBSD build support.
+  Fix build on FreeBSD 10 and 11.
+  Add FreeBSD (9.2 & 11-CURRENT) support for tlsdate and
+    tlsdate-helper. (Fabian Keil).
+  Update man pages (Kartik Mistry, Holger Levsen).
+  tlsdate will now abort if time fetch has a long delay (Avery Pennarun).
+  Updates for tlsdate related systemd service (Holger Levsen).
+  Check previously unchecked return codes (Brian Aker).
+  Update headers to reflect the correct location (Brian Aker).
+  Addition of various TODO items.
+  Update git tag to reference new GnuPG key
+    Key fingerprint = D2C6 7D20 E9C3 6C2A C5FE  74A2 D255 D3F5 C868 227F
+  Update tlsdate HTTPS user-agent to reflect proper version number
+0.0.7 Sat 2 Nov, 2013
+  Add tentative -plan9.[ch] versions of tlsdate-helper.
   Add -x option to tlsdated to override source proxies.
   Correctly check SANs against target host when using proxies.
   Fix a race in tlsdate-dbus-announce that can cause signal drops.
   Support -l argument to tlsdated.
   Pass -l and -v arguments from tlsdated to tlsdate.
-  Add FreeBSD support for tlsdate and tlsdate-helper.
   Log more verbosely at tlsdated startup.
-  Add Android build support with Android NDK for tlsdate
+  Add FreeBSD support for tlsdate and tlsdate-helper.
+  Add Android build support with Android NDK for tlsdate.
+  Add NetBSD 6.0.1 support for tlsdate and tlsdate-helper.
+  Add OpenBSD 5.2 support for tldate and tlsdate-helper.
+  Add official support for Debian, Ubuntu, CentOS, Fedora, RHEL, OpenSUSE,
+    and Arch GNU/Linux distros.
+  Add Mac OS X 10.8.3 support
+  Extensive setup/install documentation is now present in INSTALL for most OSes
+  Add DragonFly BSD 3.3 support
+  Refactored subprocess watching.
+  Added integration tests. Run with ./run-tests
+  Refactored event loop.
+  Added suspend/resume RTC corruption detection.
+  Add -w option to get time from HTTPS header instead of from TLS ServerHello
+  Update AppArmor profile
+  Add simple systemd service file
+  Extra verbose output available with -vv; useful verbosity is -v
 0.0.6 Mon 18 Feb, 2013
   Ensure that tlsdate compiles with g++ by explicit casting rather than
   implicit casting by whatever compiler is compiling tlsdate.

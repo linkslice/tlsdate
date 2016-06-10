@@ -1,5 +1,5 @@
 #
-#    AppArmor tlsdate profile for Ubuntu 11.04 and later
+#    AppArmor tlsdate profile for Debian GNU/Linux
 #
 #    This program is free software; you can redistribute it and/or
 #    modify it under the terms of version 2 of the GNU General Public
@@ -7,6 +7,7 @@
 #
 
 #include <tunables/global>
+#include <tunables/multiarch.d>
 /usr/bin/tlsdate {
   #include <abstractions/consoles>
   #include <abstractions/ssl_certs>
@@ -27,6 +28,7 @@
 
   # Required for gethostbyname
   /etc/resolv.conf r,
+  /run/resolvconf/resolv.conf r,
   /etc/nsswitch.conf r,
   /etc/localtime r,
   /etc/nsswitch.conf r,
@@ -53,11 +55,10 @@
   /dev/urandom r,
 
   # Allow mapping of shared libraries
-  /lib/* rm,
-  /lib32/* rm,
-  /lib64/* rm,
+  /lib{,32,64}/* rm,
   /usr/lib/* rm,
-  /lib/x86_64-linux-gnu/* rm,
+  /lib/@{multiarch}/* rm,
+  /usr/lib/@{multiarch}/* rm,
 
   # We'll allow tlsdate to write a new root to chroot into
   /tmp/ r,
@@ -88,6 +89,7 @@
 
   # Required for gethostbyname
   /etc/resolv.conf r,
+  /run/resolvconf/resolv.conf r,
   /etc/nsswitch.conf r,
   /etc/localtime r,
   /etc/nsswitch.conf r,
@@ -114,19 +116,17 @@
   /dev/urandom r,
 
   # Allow mapping of shared libraries
-  /lib/* rm,
-  /lib32/* rm,
-  /lib64/* rm,
+  /lib{,32,64}/* rm,
   /usr/lib/* rm,
-  /usr/local/lib/* rm,
-  /lib/x86_64-linux-gnu/* rm,
+  /lib/@{multiarch}/* rm,
+  /usr/lib/@{multiarch}/* rm,
 
   # We'll allow tlsdate to write a new root to chroot into
   /tmp/ r,
   owner /tmp/tlsdate_*/ rw,
 }
 
-/usr/bin/tlsdated {
+/usr/sbin/tlsdated {
   #include <abstractions/consoles>
   #include <abstractions/ssl_certs>
 
@@ -177,14 +177,13 @@
 
   # RTC
   /dev/rtc0 rw,
+  /dev/rtc1 rw,
 
   # Allow mapping of shared libraries
-  /lib/* rm,
-  /lib32/* rm,
-  /lib64/* rm,
+  /lib{,32,64}/* rm,
   /usr/lib/* rm,
-  /usr/local/lib/* rm,
-  /lib/x86_64-linux-gnu/* rm,
+  /lib/@{multiarch}/* rm,
+  /usr/lib/@{multiarch}/* rm,
 
   # We'll allow tlsdate to write a new root to chroot into
   /tmp/ r,
@@ -192,48 +191,10 @@
 
   # We'll allow tlsdated to cache the time here
   owner /var/cache/tlsdated/* rw,
+  # We'll allow the unprivileged helper to read the time
+  /var/cache/tlsdated/* r,
 
   # We'll allow tlsdated to exec tlsdate-helper
-  /usr/bin/tlsdate-dbus-announce ixm,
-  /usr/bin/tlsdate-routeup ixm,
   /usr/bin/tlsdate-helper ixm,
   /usr/bin/tlsdate ixm,
-}
-
-/usr/bin/tlsdate-routeup {
-  #include <abstractions/consoles>
-
-  # Allow reading of /etc/tlsdate/
-  /etc/tlsdate/*/** r,
-
-  # Allow reading of libs and /tmp
-  /etc/ld.so.cache r,
-
-  # Random number generation requires these two
-  /dev/random r,
-  /dev/urandom r,
-
-  # Allow mapping of shared libraries
-  /lib/* rm,
-  /lib32/* rm,
-  /lib64/* rm,
-  /usr/lib/* rm,
-  /lib/x86_64-linux-gnu/* rm,
-}
-
-/usr/bin/tlsdate-dbus-announce {
-  #include <abstractions/consoles>
-
-  # Allow reading of /etc/tlsdate/
-  /etc/tlsdate/*/** r,
-
-  # Allow reading of libs and /tmp
-  /etc/ld.so.cache r,
-
-  # Allow mapping of shared libraries
-  /lib/* rm,
-  /lib32/* rm,
-  /lib64/* rm,
-  /usr/lib/* rm,
-  /lib/x86_64-linux-gnu/* rm,
 }

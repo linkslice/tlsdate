@@ -5,7 +5,7 @@
 .SH NAME
 tlsdated.conf \- tlsdated config file
 .SH SYNTAX
-\fBtlsdated.conf\fR is the configuration file for the \fBtlsdated(1)\fR daemon.
+\fBtlsdated.conf\fR is the configuration file for the \fBtlsdated(8)\fR daemon.
 The config file is formatted as a list of key-value pairs, one per line,
 separated by whitespace. Whitespace inside values is preserved, so
 .RS
@@ -42,10 +42,8 @@ at exit.
 If enabled, set the hwclock to the fetched time.
 .IP "steady-state-interval [int]"
 Check at least once this many seconds when in steady state.
-.IP "subprocess-tries [int]"
-How many times to try waiting for the subprocess.
-.IP "subprocess-wait-between-tries [int]"
-How many seconds to wait between each attempt to wait for the subprocess.
+.IP "subprocess-timeout [int]"
+How many seconds to wait for the subprocess to exit.
 .IP "verbose [bool]"
 If enabled, tlsdated will be annoyingly verbose in syslog and on stdout.
 .IP "wait-between-tries [int]"
@@ -67,9 +65,11 @@ end
 It's likely! Let us know by contacting jacob@appelbaum.net
 
 Note that
-.B tlsdated(1)
-is still in Alpha, and may not work as expected.
+.B tlsdated(8)
+is in Beta, and may not work as expected.
 .SH AUTHOR
 Jacob Appelbaum <jacob at appelbaum dot net>
 .SH "SEE ALSO"
-.B tlsdated(1),
+.B tlsdate(1),
+.B tlsdate-helper(1),
+.B tlsdated(8),

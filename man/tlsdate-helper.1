@@ -6,7 +6,7 @@
 tlsdate-helper \- secure parasitic rdate replacement
 .SH SYNOPSIS
 .B tlsdate-helper host port protocol ca_racket verbose certdir setclock \
-showtime timewarp leapaway proxy-type://proxyhost:proxyport
+showtime timewarp leapaway proxy-type://proxyhost:proxyport httpmode
 .SH DESCRIPTION
 .B tlsdate-helper
 is a tool for setting the system clock by hand or by communication
@@ -30,11 +30,10 @@ It's likely! Let us know by contacting jacob@appelbaum.net
 
 Note that
 .B tlsdate(1)
-is still in Alpha, and may not work as expected.
+is in Beta, and may not work as expected.
 .SH AUTHOR
 Jacob Appelbaum <jacob at appelbaum dot net>
 .SH "SEE ALSO"
 .B tlsdate(1),
-.B tlsdated(1)
-.B tlsdate-routeup(1)
-.B tlsdate-dbus-announce(1)
+.B tlsdated(8),
+.B tlsdated.conf(5)

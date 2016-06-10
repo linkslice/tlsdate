@@ -14,6 +14,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef TARGET_OS_HAIKU
+#include <posix/string.h>
+#include <bsd/string.h>
+#endif
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -25,6 +29,9 @@
 #include <grp.h>
 #include <arpa/inet.h>
 #include <ctype.h>
+#ifdef HAVE_PRCTL
+#include <sys/prctl.h>
+#endif
 
 #ifndef USE_POLARSSL
 #include <openssl/bio.h>
@@ -37,6 +44,7 @@
 #endif
 
 int verbose;
+int verbose_debug;
 
 #include "src/util.h"
 
@@ -53,11 +61,11 @@ int verbose;
 // We set this manually to ensure others can reproduce a build;
 // automation of this will make every build different!
 #ifndef RECENT_COMPILE_DATE
-#define RECENT_COMPILE_DATE (uint32_t) 1342323666
+#define RECENT_COMPILE_DATE 1342323666L
 #endif
 
 #ifndef MAX_REASONABLE_TIME
-#define MAX_REASONABLE_TIME (uint32_t) 1999991337
+#define MAX_REASONABLE_TIME 1999991337L
 #endif
 
 #ifndef MIN_PUB_KEY_LEN
@@ -75,6 +83,10 @@ int verbose;
 // (in msec), a warning is printed.
 #define TLS_RTT_THRESHOLD      2000
 
+// After the duration of the TLS handshake exceeds this threshold
+// (in msec), we consider the operation to have failed.
+#define TLS_RTT_UNREASONABLE      30000
+
 // RFC 5280 says...
 // ub-common-name-length INTEGER ::= 64
 #define MAX_CN_NAME_LENGTH 64
@@ -84,6 +96,19 @@ int verbose;
 
 // To support our RFC 2595 wildcard verification
 #define RFC2595_MIN_LABEL_COUNT 3
+
+// Define a max length for the HTTP Date: header
+#define MAX_DATE_LINE_LEN 32
+
+// Define a max length for HTTP headers
+#define MAX_HTTP_HEADERS_SIZE 8192
+
+// Define our basic HTTP request
+#define HTTP_REQUEST    \
+  "HEAD / HTTP/1.1\r\n" \
+  "User-Agent: %s\r\n"  \
+  "Host: %s\r\n"        \
+  "\r\n"
 
 static int ca_racket;
 
@@ -114,6 +139,6 @@ void inspect_key (SSL *ssl, const char *hostname);
 uint32_t dns_label_count (char *label, char *delim);
 uint32_t check_wildcard_match_rfc2595 (const char *orig_hostname,
                                        const char *orig_cert_wild_card);
-static void run_ssl (uint32_t *time_map, int time_is_an_illusion);
+static void run_ssl (uint32_t *time_map, int time_is_an_illusion, int http);
 
 #endif
